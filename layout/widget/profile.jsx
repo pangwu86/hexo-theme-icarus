@@ -21,8 +21,11 @@ class Profile extends Component {
                 title={link.name}
                 href={link.url}
               >
-                {link.icon ? <i class={link.icon}></i> : null}
-                {link.img ? <img class="icon-img" src={link.img} /> : null}
+                {link.img ? (
+                  <img class="icon-img" src={link.img} />
+                ) : (
+                  <i class={link.icon}></i>
+                )}
               </a>
             );
           })}
