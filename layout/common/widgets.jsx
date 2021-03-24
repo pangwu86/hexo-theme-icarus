@@ -19,6 +19,7 @@ function getPageName(page) {
   } else if (page.__post === true) {
     return "post";
   }
+  return "page";
 }
 
 function formatWidgets(widgets, page) {
@@ -29,6 +30,7 @@ function formatWidgets(widgets, page) {
       .forEach((widget) => {
         if ("pages" in widget && typeof widget.pages === "object") {
           const pageName = getPageName(page);
+          logger.info("page-name:" + pageName);
           if (pageName) {
             var pageShow = false;
             widget.pages.forEach((item) => {
@@ -39,6 +41,8 @@ function formatWidgets(widgets, page) {
             if (!pageShow) {
               return;
             }
+          } else {
+            return;
           }
         }
         if (
