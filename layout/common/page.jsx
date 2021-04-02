@@ -1,5 +1,6 @@
 const moment = require("moment");
 const { Component, Fragment } = require("inferno");
+const Comment = require("./comment");
 const ArticleLicensing = require("hexo-component-inferno/lib/view/misc/article_licensing");
 
 /**
@@ -202,7 +203,9 @@ module.exports = class extends Component {
         {/* Post navigation */}
         {!index && (page.prev || page.next) ? null : null}
         {/* Comment */}
-        {!index ? null : null}
+        {!index ? (
+          <Comment config={config} page={page} helper={helper} />
+        ) : null}
       </Fragment>
     );
   }

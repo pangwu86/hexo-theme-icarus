@@ -13,6 +13,7 @@ class Footer extends Component {
       links,
       showVisitorCounter,
       visitorCounterTitle,
+      beian,
     } = this.props;
 
     let footerLogo = "";
@@ -52,6 +53,12 @@ class Footer extends Component {
                 >
                   Icarus
                 </a>
+                {/* beian */}
+                <br />
+                <a href={beian.url} target="_blank" rel="noopener">
+                  {beian.title}
+                </a>
+                {/* 访问统计 */}
                 {showVisitorCounter ? <br /> : null}
                 {showVisitorCounter ? (
                   <span
@@ -95,7 +102,7 @@ class Footer extends Component {
 module.exports = cacheComponent(Footer, "common.footer", (props) => {
   const { config, helper } = props;
   const { url_for, _p, date } = helper;
-  const { logo, title, author, footer, plugins } = config;
+  const { logo, title, author, footer, plugins, beian } = config;
 
   const links = {};
   if (footer && footer.links) {
@@ -121,5 +128,6 @@ module.exports = cacheComponent(Footer, "common.footer", (props) => {
       "plugin.visitor_count",
       '<span id="busuanzi_value_site_uv">0</span>'
     ),
+    beian,
   };
 });
