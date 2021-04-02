@@ -14,6 +14,7 @@ class Footer extends Component {
       showVisitorCounter,
       visitorCounterTitle,
       beian,
+      beian_gongan,
     } = this.props;
 
     let footerLogo = "";
@@ -25,6 +26,11 @@ class Footer extends Component {
       }
     } else {
       footerLogo = siteTitle;
+    }
+
+    let hasBeian = false;
+    if (beian || beian_gongan) {
+      hasBeian = true;
     }
 
     return (
@@ -53,11 +59,23 @@ class Footer extends Component {
                 >
                   Icarus
                 </a>
-                {/* beian */}
-                <br />
-                <a href={beian.url} target="_blank" rel="noopener">
-                  {beian.title}
-                </a>
+                {/* 备案 */}
+                {hasBeian ? <br /> : null}
+                {beian_gongan ? (
+                  <div class="beian-link">
+                    <img src="/img/ghs.png" class="beian-icon" alt="" />
+                    <a href={beian_gongan.url} target="_blank" rel="noopener">
+                      {beian_gongan.title}
+                    </a>
+                  </div>
+                ) : null}
+                {beian ? (
+                  <div class="beian-link">
+                    <a href={beian.url} target="_blank" rel="noopener">
+                      {beian.title}
+                    </a>
+                  </div>
+                ) : null}
                 {/* 访问统计 */}
                 {showVisitorCounter ? <br /> : null}
                 {showVisitorCounter ? (
@@ -102,7 +120,7 @@ class Footer extends Component {
 module.exports = cacheComponent(Footer, "common.footer", (props) => {
   const { config, helper } = props;
   const { url_for, _p, date } = helper;
-  const { logo, title, author, footer, plugins, beian } = config;
+  const { logo, title, author, footer, plugins, beian, beian_gongan } = config;
 
   const links = {};
   if (footer && footer.links) {
@@ -129,5 +147,6 @@ module.exports = cacheComponent(Footer, "common.footer", (props) => {
       '<span id="busuanzi_value_site_uv">0</span>'
     ),
     beian,
+    beian_gongan,
   };
 });
