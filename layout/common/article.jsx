@@ -157,7 +157,7 @@ module.exports = class extends Component {
               }}
             ></div>
             {/* Licensing block */}
-            {!index &&
+            {/* {!index &&
             article &&
             article.licenses &&
             Object.keys(article.licenses) ? (
@@ -166,7 +166,47 @@ module.exports = class extends Component {
                 config={config}
                 helper={helper}
               />
+            ) : null} */}
+
+            {!index && article && article.licenses ? (
+              <div>
+                <ul class="post-copyright">
+                  <li>
+                    <strong>本文标题：</strong>
+                    <a href="{url_for(post.link ? post.link : post.path)}">
+                      {post.title}
+                    </a>
+                  </li>
+                  <li>
+                    <strong>本文作者：</strong>
+                    <a href="https://xiefayang.com">旺阳</a>
+                  </li>
+                  <li>
+                    <strong>本文链接：</strong>
+                    <a href="{url_for(post.link ? post.link : post.path)}">
+                      https://www.lqwang.net/{post.path}
+                    </a>
+                  </li>
+                  <li>
+                    <strong>发布时间：</strong>
+                    {date(post.date)}
+                  </li>
+                  <li>
+                    <strong>版权声明：</strong>
+                    本博客所有文章除特别声明外，均采用{" "}
+                    <a
+                      href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"
+                      rel="external nofollow"
+                      target="_blank"
+                    >
+                      CC BY-NC-SA 4.0
+                    </a>{" "}
+                    许可协议。转载请注明出处！
+                  </li>
+                </ul>
+              </div>
             ) : null}
+
             <hr style="height:1px;margin:1rem 0" />
             <div className="level is-mobile is-flex">
               {/* Tags */}
