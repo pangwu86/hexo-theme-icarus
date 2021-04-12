@@ -167,18 +167,17 @@ module.exports = class extends Component {
                 helper={helper}
               />
             ) : null}
+            <hr style="height:1px;margin:1rem 0" />
+            <div className="level is-mobile is-flex"></div>
             {/* Tags */}
-            {!index && page.tags && page.tags.length ? (
-              <div class="article-tags is-size-7 mb-4">
-                <span class="mr-2">#</span>
-                {page.tags.map((tag) => {
+            {page.tags && page.tags.length ? (
+              <div class="article-tags is-size-7 is-uppercase">
+                <i class="fas fa-tags has-text-grey"></i>&nbsp;
+                {page.tags.map((tag, index) => {
                   return (
-                    <a
-                      class="link-muted mr-2"
-                      rel="tag"
-                      href={url_for(tag.path)}
-                    >
+                    <a class="link-muted" rel="tag" href={url_for(tag.path)}>
                       {tag.name}
+                      {index !== page.tags.length - 1 ? ", " : ""}
                     </a>
                   );
                 })}
@@ -190,6 +189,7 @@ module.exports = class extends Component {
                 class="article-more button is-small is-size-7"
                 href={`${url_for(page.link || page.path)}#more`}
               >
+                <i class="fas fa-book-reader has-text-grey"></i>&nbsp;&nbsp;
                 {__("article.more")}
               </a>
             ) : null}
