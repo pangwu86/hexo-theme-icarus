@@ -93,7 +93,7 @@ module.exports = class extends Component {
                     </span>
                   )}
                   {/* Last Update Date */}
-                  {page.updated && (
+                  {/* {page.updated && (
                     <span class="level-item is-hidden-mobile">
                       <i class="far fa-calendar-check">&nbsp;</i>
                       <time
@@ -103,7 +103,7 @@ module.exports = class extends Component {
                         {date(page.updated)}
                       </time>
                     </span>
-                  )}
+                  )} */}
                   {/* author */}
                   {page.author ? (
                     <span class="level-item"> {page.author} </span>
