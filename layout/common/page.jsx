@@ -72,7 +72,7 @@ module.exports = class extends Component {
                     ></span>
                   )}
                   {/* Last Update Date */}
-                  {page.updated && (
+                  {/* {page.updated && (
                     <span
                       class="level-item"
                       dangerouslySetInnerHTML={{
@@ -86,7 +86,7 @@ module.exports = class extends Component {
                         ),
                       }}
                     ></span>
-                  )}
+                  )} */}
                   {/* author */}
                   {page.author ? (
                     <span class="level-item"> {page.author} </span>
