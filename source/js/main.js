@@ -12,6 +12,13 @@
         );
       }
     }
+    // add class
+    if ($(this).prop("class") == "") {
+      $(this).prop("class", "box px-0 py-0 ml-auto mr-auto");
+    }
+    if (!$(this).attr("width")) {
+      $(this).width("65%");
+    }
   });
 
   if (typeof $.fn.lightGallery === "function") {
