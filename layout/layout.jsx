@@ -29,7 +29,7 @@ module.exports = class extends Component {
                     "order-2": true,
                     "column-main": true,
                     "is-12": columnCount === 1,
-                    "is-8-tablet is-8-desktop is-9-widescreen":
+                    "is-8-tablet is-8-desktop is-8-widescreen":
                       columnCount === 2,
                     "is-8-tablet is-8-desktop is-6-widescreen":
                       columnCount === 3,
