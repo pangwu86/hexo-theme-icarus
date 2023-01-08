@@ -1,5 +1,6 @@
 const moment = require("moment");
 const { Component, Fragment } = require("inferno");
+const { toMomentLocale } = require("hexo/lib/plugins/helper/date");
 const Share = require("./share");
 const Donates = require("./donates");
 const Comment = require("./comment");
@@ -38,11 +39,22 @@ module.exports = class extends Component {
     const { article, plugins } = config;
     const { url_for, date, date_xml, __, _p, is_post } = helper;
 
-    const indexLaunguage = config.language || "en";
-    const language = page.lang || page.language || config.language || "en";
+    const indexLaunguage = toMomentLocale(config.language || "en");
+    const language = toMomentLocale(
+      page.lang || page.language || config.language || "en"
+    );
+
     const cover = page.cover ? url_for(page.cover) : null;
     const crType = page.crtype || 0;
     const crText = getCopyRightText(crType);
+
+    const updateTime =
+      article && article.update_time !== undefined ? article.update_time : true;
+    const isUpdated =
+      page.updated && !moment(page.date).isSame(moment(page.updated));
+    const shouldShowUpdated =
+      page.updated &&
+      ((updateTime === "auto" && isUpdated) || updateTime === true);
 
     return (
       <Fragment>
@@ -62,13 +74,13 @@ module.exports = class extends Component {
               )}
             </div>
           ) : null}
-          {/* Metadata */}
           <article
             class={`card-content article${
               "direction" in page ? " " + page.direction : ""
             }`}
             role="article"
           >
+            {/* Metadata */}
             {page.layout !== "page" ? (
               <div class="article-meta is-size-7 is-uppercase level is-mobile">
                 <div class="level-left">
@@ -82,28 +94,36 @@ module.exports = class extends Component {
                   ) : null}
                   {/* Creation Date */}
                   {page.date && (
-                    <span class="level-item">
-                      <i className="far fa-calendar-alt">&nbsp;</i>
-                      <time
-                        dateTime="${date_xml(page.date)}"
-                        title="${date_xml(page.date)}"
-                      >
-                        {date(page.date)}
-                      </time>
-                    </span>
+                    <span
+                      class="level-item"
+                      dangerouslySetInnerHTML={{
+                        __html: _p(
+                          "article.created_at",
+                          `<time dateTime="${date_xml(
+                            page.date
+                          )}" title="${new Date(
+                            page.date
+                          ).toLocaleString()}">${date(page.date)}</time>`
+                        ),
+                      }}
+                    ></span>
                   )}
                   {/* Last Update Date */}
-                  {/* {page.updated && (
-                    <span class="level-item is-hidden-mobile">
-                      <i class="far fa-calendar-check">&nbsp;</i>
-                      <time
-                        dateTime="${date_xml(page.updated)}"
-                        title="${date_xml(page.updated)}"
-                      >
-                        {date(page.updated)}
-                      </time>
-                    </span>
-                  )} */}
+                  {shouldShowUpdated && (
+                    <span
+                      class="level-item"
+                      dangerouslySetInnerHTML={{
+                        __html: _p(
+                          "article.updated_at",
+                          `<time dateTime="${date_xml(
+                            page.updated
+                          )}" title="${new Date(
+                            page.updated
+                          ).toLocaleString()}">${date(page.updated)}</time>`
+                        ),
+                      }}
+                    ></span>
+                  )}
                   {/* author */}
                   {page.author ? (
                     <span class="level-item"> {page.author} </span>
@@ -196,71 +216,32 @@ module.exports = class extends Component {
                 helper={helper}
               />
             ) : null}
-
-            {/* {!index && article && article.licenses ? (
-              <div>
-                <ul class="post-copyright">
-                  <li>
-                    <strong>本文标题：</strong>
-                    <a href="{url_for(page.link || page.path)}">{page.title}</a>
-                  </li>
-                  <li>
-                    <strong>本文作者：</strong>
-                    <a href="https://github.com/pangwu86">{page.author}</a>
-                  </li>
-                  <li>
-                    <strong>本文链接：</strong>
-                    <a href="{url_for(page.link || page.path)}">
-                      {url_for(page.link || page.path)}
-                    </a>
-                  </li>
-                  <li>
-                    <strong>发布时间：</strong>
-                    {date(page.date)}
-                  </li>
-                  <li>
-                    <strong>版权声明：</strong>
-                    本博客所有文章除特别声明外，均采用
+            {/* Tags */}
+            {!index && page.tags && page.tags.length ? (
+              <div class="article-tags is-size-7 mb-4">
+                <span class="mr-2">#</span>
+                {page.tags.map((tag) => {
+                  return (
                     <a
-                      href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"
-                      rel="external nofollow"
-                      target="_blank"
+                      class="link-muted mr-2"
+                      rel="tag"
+                      href={url_for(tag.path)}
                     >
-                      CC BY-NC-SA 4.0
-                    </a>{" "}
-                    许可协议。转载请注明出处！
-                  </li>
-                </ul>
+                      {tag.name}
+                    </a>
+                  );
+                })}
               </div>
-            ) : null} */}
-
-            <hr style="height:1px;margin:1rem 0" />
-            <div className="level is-mobile is-flex">
-              {/* Tags */}
-              {page.tags && page.tags.length ? (
-                <div class="article-tags is-size-7 is-uppercase">
-                  <i class="fas fa-tags has-text-grey"></i>&nbsp;
-                  {page.tags.map((tag, index) => {
-                    return (
-                      <a class="link-muted" rel="tag" href={url_for(tag.path)}>
-                        {tag.name}
-                        {index !== page.tags.length - 1 ? ", " : ""}
-                      </a>
-                    );
-                  })}
-                </div>
-              ) : null}
-              {/* "Read more" button */}
-              {index && page.excerpt ? (
-                <a
-                  class="article-more button is-small is-size-7"
-                  href={`${url_for(page.link || page.path)}#more`}
-                >
-                  <i class="fas fa-book-reader has-text-grey"></i>&nbsp;&nbsp;
-                  {__("article.more")}
-                </a>
-              ) : null}
-            </div>
+            ) : null}
+            {/* "Read more" button */}
+            {index && page.excerpt ? (
+              <a
+                class="article-more button is-small is-size-7"
+                href={`${url_for(page.link || page.path)}#more`}
+              >
+                {__("article.more")}
+              </a>
+            ) : null}
             {/* Share button */}
             {!index ? (
               <Share config={config} page={page} helper={helper} />
